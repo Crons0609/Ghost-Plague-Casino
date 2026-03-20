@@ -1,0 +1,17 @@
+# ── Dependencies ──────────────────────
+node_modules/
+
+# ── Environment secrets ───────────────
+.env
+firebase-admin.json
+
+# ── OS / Editor junk ─────────────────
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# ── Build output (if ever added) ──────
+dist/
+build/
