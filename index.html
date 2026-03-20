@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0b0f" />
+  <meta name="description" content="Ghost Plague Casino — La experiencia VIP definitiva. Juega, apuesta y gana." />
+  <title>Ghost Plague Casino</title>
+
+  <!-- Google Fonts: Cinzel (luxury titles) + Inter (clean UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="Assets/css/app.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN: NO TELEGRAM (shown if not from Telegram)
+  ══════════════════════════════════════════════ -->
+  <div id="screen-no-telegram" class="screen screen--gate" aria-hidden="true">
+    <div class="gate__bg">
+      <div class="gate__orbs">
+        <span class="orb orb--1"></span>
+        <span class="orb orb--2"></span>
+        <span class="orb orb--3"></span>
+      </div>
+    </div>
+    <div class="gate__content">
+      <div class="gate__logo">
+        <div class="gate__skull">💀</div>
+        <h1 class="gate__title">GHOST PLAGUE<br/><span>CASINO</span></h1>
+        <p class="gate__subtitle">La experiencia VIP definitiva</p>
+      </div>
+      <div class="gate__cta">
+        <p class="gate__hint">Accede a través de Telegram para comenzar tu experiencia</p>
+        <a href="https://t.me/Ghost_Plague_CasinoBot" class="btn btn--primary btn--xl" id="btn-open-telegram">
+          <span class="btn__icon">✈️</span>
+          <span class="btn__text">Entrar desde Telegram</span>
+          <span class="btn__glow"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN: MAIN APP (shown if from Telegram)
+  ══════════════════════════════════════════════ -->
+  <div id="screen-app" class="screen screen--app" aria-hidden="true">
+
+    <!-- Ambient background layers -->
+    <div class="app__bg" aria-hidden="true">
+      <div class="app__bg-grid"></div>
+      <div class="app__bg-glow app__bg-glow--top"></div>
+      <div class="app__bg-glow app__bg-glow--btm"></div>
+      <div class="particle-field" id="particle-field"></div>
+    </div>
+
+    <!-- ─── TOP BAR ─────────────────────────────────── -->
+    <header class="topbar" role="banner">
+      <button class="topbar__close" id="btn-close" aria-label="Cerrar aplicación" title="Salir">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M2 2 L16 16 M16 2 L2 16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <div class="topbar__user" id="topbar-user">
+        <div class="topbar__avatar-wrap">
+          <img class="topbar__avatar" id="user-avatar" src="" alt="Avatar" />
+          <div class="topbar__avatar-ring"></div>
+        </div>
+        <div class="topbar__info">
+          <span class="topbar__name" id="user-name">Cargando...</span>
+          <span class="topbar__level" id="user-level">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <polygon points="5,1 6.5,4 10,4.3 7.5,6.7 8.3,10 5,8.2 1.7,10 2.5,6.7 0,4.3 3.5,4" fill="#f4c842"/>
+            </svg>
+            Nivel <strong id="level-num">1</strong>
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ─── MAIN SCROLL CONTAINER ────────────────────── -->
+    <main class="app__main" role="main">
+
+      <!-- CASINO BRAND SECTION -->
+      <section class="brand-section" aria-label="Nombre del casino">
+        <div class="brand__skull" aria-hidden="true">💀</div>
+        <h1 class="brand__name">
+          <span class="brand__ghost">GHOST</span>
+          <span class="brand__plague">PLAGUE</span>
+          <span class="brand__casino">CASINO</span>
+        </h1>
+        <p class="brand__slogan" id="casino-slogan">Donde la suerte se convierte en poder</p>
+        <div class="brand__line" aria-hidden="true"></div>
+      </section>
+
+      <!-- BALANCE CARD -->
+      <section class="balance-section" aria-label="Balance del jugador">
+        <div class="balance-card" id="balance-card">
+          <div class="balance-card__label">
+            <span class="balance-card__icon">🪙</span>
+            <span>Tus Bits</span>
+          </div>
+          <div class="balance-card__amount">
+            <span class="balance-card__currency">B</span>
+            <span class="balance-card__value" id="user-bits" aria-live="polite">0</span>
+          </div>
+          <div class="balance-card__sub" id="balance-sub">
+            <span id="user-xp">XP: 0</span>
+            <span class="balance-card__dot"></span>
+            <span id="user-games">Partidas: 0</span>
+          </div>
+          <div class="balance-card__shimmer" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <!-- ACTION BUTTONS -->
+      <section class="actions-section" aria-label="Acciones principales">
+        <button class="btn btn--primary btn--lg" id="btn-play" aria-label="Jugar ahora">
+          <span class="btn__icon">🎰</span>
+          <span class="btn__text">Jugar Ahora</span>
+          <span class="btn__badge" id="games-badge">HOT</span>
+          <span class="btn__glow"></span>
+        </button>
+
+        <button class="btn btn--secondary btn--lg" id="btn-sports" aria-label="Apuestas deportivas">
+          <span class="btn__icon">⚽</span>
+          <span class="btn__text">Apuestas Deportivas</span>
+          <span class="btn__glow"></span>
+        </button>
+      </section>
+
+      <!-- PAYMENT ACTIONS -->
+      <section class="pay-section" aria-label="Pagos y recargas">
+        <button class="pay-btn" id="btn-recharge" aria-label="Recargar bits">
+          <div class="pay-btn__icon">💳</div>
+          <div class="pay-btn__info">
+            <span class="pay-btn__title">Recargar Bits</span>
+            <span class="pay-btn__sub">Depósito rápido</span>
+          </div>
+          <svg class="pay-btn__arrow" width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M7 4 L12 9 L7 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="pay-btn" id="btn-paypal" aria-label="PayPal Bits">
+          <div class="pay-btn__icon">🅿️</div>
+          <div class="pay-btn__info">
+            <span class="pay-btn__title">PayPal Bits</span>
+            <span class="pay-btn__sub">Retiro seguro</span>
+          </div>
+          <svg class="pay-btn__arrow" width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M7 4 L12 9 L7 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </section>
+
+      <!-- STATS ROW -->
+      <section class="stats-section" aria-label="Estadísticas del jugador">
+        <div class="stat-chip">
+          <span class="stat-chip__val" id="stat-level">1</span>
+          <span class="stat-chip__label">Nivel</span>
+        </div>
+        <div class="stat-chip stat-chip--mid">
+          <span class="stat-chip__val" id="stat-xp">0</span>
+          <span class="stat-chip__label">XP</span>
+        </div>
+        <div class="stat-chip">
+          <span class="stat-chip__val" id="stat-games">0</span>
+          <span class="stat-chip__label">Partidas</span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom safe area spacer -->
+    <div class="safe-bottom" aria-hidden="true"></div>
+
+  </div><!-- end #screen-app -->
+
+  <!-- Loading overlay -->
+  <div id="app-loader" class="loader" aria-label="Cargando" role="status">
+    <div class="loader__skull">💀</div>
+    <div class="loader__ring"></div>
+    <p class="loader__text">Ghost Plague Casino</p>
+  </div>
+
+  <!-- Firebase compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="Assets/js/firebase.js"></script>
+  <script src="Assets/js/app.js"></script>
+</body>
+</html>
