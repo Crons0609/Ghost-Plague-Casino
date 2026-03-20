@@ -182,6 +182,44 @@
 
   </div><!-- end #screen-app -->
 
+  <!-- ═══════════════════════════════════════════
+       SCREEN: GAMES SELECTION (shown on "Jugar Ahora")
+  ══════════════════════════════════════════════ -->
+  <div id="screen-games" class="screen screen--games" aria-hidden="true">
+    
+    <!-- Ambient background layers (similar to main app) -->
+    <div class="app__bg" aria-hidden="true">
+      <div class="app__bg-grid"></div>
+      <div class="app__bg-glow app__bg-glow--top"></div>
+      <div class="app__bg-glow app__bg-glow--btm"></div>
+    </div>
+
+    <!-- ─── TOP BAR (GAMES) ─────────────────────────── -->
+    <header class="topbar-games" role="banner">
+      <button class="topbar-games__back" id="btn-back-games" aria-label="Volver al inicio">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="topbar-games__back-text">Volver</span>
+      </button>
+
+      <h2 class="topbar-games__title">Selecciona tu juego</h2>
+
+      <div class="topbar-games__balance">
+        <span class="balance-icon">🪙</span>
+        <span id="games-user-bits">0</span>
+      </div>
+    </header>
+
+    <!-- ─── GAMES GRID ───────────────────────────────── -->
+    <main class="games-main" role="main">
+      <div class="games-grid" id="gamesContainer">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </main>
+
+  </div><!-- end #screen-games -->
+
   <!-- Loading overlay -->
   <div id="app-loader" class="loader" aria-label="Cargando" role="status">
     <div class="loader__skull">💀</div>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#073a32" />
+  <title>Blackjack VIP | Ghost Plague Casino</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- App CSS (Base Tokens) -->
+  <link rel="stylesheet" href="../Assets/css/app.css" />
+  <!-- Blackjack CSS -->
+  <link rel="stylesheet" href="../Assets/css/blackjack.css" />
+</head>
+<body class="bj-body">
+
+  <div id="screen-blackjack" class="screen screen--blackjack is-active">
+    
+    <!-- ─── TOP BAR (BLACKJACK) ───────────────────────── -->
+    <header class="topbar-bj" role="banner">
+      <button class="topbar-bj__back" id="btn-back-bj" aria-label="Volver al inicio">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="topbar-bj__back-text">Volver</span>
+      </button>
+
+      <h2 class="topbar-bj__title">VIP BLACKJACK</h2>
+
+      <div class="topbar-bj__balance">
+        <span class="balance-icon">🪙</span>
+        <span id="bj-user-bits">...</span>
+      </div>
+    </header>
+
+    <!-- ─── BLACKJACK TABLE ───────────────────────────── -->
+    <main class="bj-table-container" role="main">
+      <div class="bj-table">
+        
+        <!-- Table Rim (Wood/Leather effect handled in CSS) -->
+        <div class="bj-table__rim"></div>
+        
+        <!-- Inner Felt -->
+        <div class="bj-table__felt">
+          
+          <!-- Center Logo / Premium Graphic -->
+          <div class="bj-table__logo">
+            <span class="bj-logo-icon">♠ VIP ♠</span>
+            <span class="bj-logo-text">PAYS 3 TO 2</span>
+            <span class="bj-logo-sub">DEALER MUST DRAW TO 16 AND STAND ON ALL 17s</span>
+          </div>
+
+          <!-- Dealer Area -->
+          <div class="bj-area bj-area--dealer">
+            <div class="bj-score-bubble" id="dealer-score-bubble" style="opacity: 0;">0</div>
+            <div class="bj-cards" id="dealer-cards"></div>
+          </div>
+
+          <!-- Message Overlay (Win/Lose/Tie) -->
+          <div class="bj-message-overlay" id="bj-message">
+            <h3 class="bj-message-text" id="bj-message-text"></h3>
+            <p class="bj-message-sub" id="bj-message-sub"></p>
+          </div>
+
+          <!-- Player Area -->
+          <div class="bj-area bj-area--player">
+            <div class="bj-cards" id="player-cards"></div>
+            <div class="bj-score-bubble" id="player-score-bubble" style="opacity: 0;">0</div>
+            
+            <div class="bj-bet-display" id="bj-current-bet-display" style="opacity: 0;">
+              Apuesta: <span id="bj-bet-amount">0</span> 🪙
+            </div>
+          </div>
+
+        </div><!-- /felt -->
+      </div><!-- /table -->
+    </main>
+
+    <!-- ─── BOTTOM CONTROLS ───────────────────────────── -->
+    <footer class="bj-controls">
+      
+      <!-- Phase 1: Betting -->
+      <div class="bj-panel bj-panel--bet is-active" id="panel-bet">
+        <div class="bj-bet-chips">
+          <button class="bj-chip" data-val="10">+10</button>
+          <button class="bj-chip" data-val="50">+50</button>
+          <button class="bj-chip" data-val="100">+100</button>
+          <button class="bj-chip bj-chip--all" id="btn-bet-all">ALL IN</button>
+        </div>
+        <div class="bj-bet-actions">
+          <div class="bj-bet-input-wrap">
+            <input type="number" id="bj-input-bet" class="bj-bet-input" value="10" min="1" step="1">
+            <span class="bj-bet-currency">BITS</span>
+          </div>
+          <button class="bj-btn bj-btn--deal" id="btn-deal">
+            REPARTIR
+          </button>
+        </div>
+      </div>
+
+      <!-- Phase 2: Playing Actions -->
+      <div class="bj-panel bj-panel--play" id="panel-play">
+        <button class="bj-btn bj-btn--action bj-btn--hit" id="btn-hit">
+          <i class="fas fa-plus"></i> PEDIR
+        </button>
+        <button class="bj-btn bj-btn--action bj-btn--stand" id="btn-stand">
+          <i class="fas fa-hand-paper"></i> PLANTARSE
+        </button>
+        <button class="bj-btn bj-btn--action bj-btn--double" id="btn-double">
+          <i class="fas fa-angle-double-up"></i> DOBLAR (x2)
+        </button>
+      </div>
+
+      <!-- Phase 3: Result / Restart -->
+      <div class="bj-panel bj-panel--result" id="panel-result">
+        <button class="bj-btn bj-btn--deal" id="btn-restart">
+          NUEVA PARTIDA
+        </button>
+      </div>
+
+    </footer>
+
+    <!-- Bottom safe area -->
+    <div class="safe-bottom" aria-hidden="true"></div>
+
+  </div><!-- end #screen-blackjack -->
+
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- font-awesome for icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+  <!-- Firebase compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  
+  <!-- App JS -->
+  <script src="../Assets/js/firebase.js"></script>
+  <script src="../Assets/js/blackjack.js"></script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+/* ════════════════════════════════════════════════════════
+   GHOST PLAGUE CASINO — SPORTS BETTING
+   Assets/css/servicios.css
+   v1.0 | Pure CSS | Optimized 60 FPS
+════════════════════════════════════════════════════════ */
+
+.sports-body {
+  background: var(--bg-void);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-primary);
+}
+
+.screen--sports {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg-void);
+}
+
+/* ─── TOP BAR ────────────────────────────────────────── */
+.topbar-sports {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--safe-top) + 16px) 20px 16px;
+  background: linear-gradient(180deg, rgba(11,11,15,0.96) 0%, rgba(11,11,15,0.85) 60%, transparent 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.topbar-sports__back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px 8px 6px;
+  border-radius: var(--radius-md);
+  transition: color 0.2s, background 0.2s, transform 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+.topbar-sports__back:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  transform: translateX(-3px);
+}
+.topbar-sports__back:active { transform: scale(0.95); }
+
+.topbar-sports__back-text { display: none; }
+@media (min-width: 480px) { .topbar-sports__back-text { display: inline; } }
+
+.topbar-sports__title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(14px, 4vw, 18px);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  text-shadow: 0 0 10px rgba(155,93,229,0.5);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.topbar-sports__balance {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--neon-gold);
+  background: rgba(244,200,66,0.1);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(244,200,66,0.2);
+  box-shadow: 0 0 15px rgba(244,200,66,0.15);
+}
+
+/* ─── MAIN CONTENT ───────────────────────────────────── */
+.sports-main {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 24px 20px 40px;
+  position: relative;
+  z-index: 1;
+  scrollbar-width: none;
+}
+.sports-main::-webkit-scrollbar { display: none; }
+
+.sports-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+.sports-header__title {
+  font-size: 20px;
+  font-family: 'Cinzel', serif;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.sports-header__subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ─── GRID ───────────────────────────────────────────── */
+.matches-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+@media (min-width: 768px) { .matches-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
+@media (min-width: 1100px) { .matches-grid { grid-template-columns: repeat(3, 1fr); gap: 28px; } }
+
+/* ─── MATCH CARD ─────────────────────────────────────── */
+.match-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-xl);
+  padding: 24px 20px;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+  will-change: transform, box-shadow;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s, border-color 0.3s;
+}
+
+.match-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  border-color: rgba(199,125,255,0.6);
+  box-shadow: var(--glow-purple), 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+/* Ghost Glow Sweep */
+.match-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+  pointer-events: none;
+  z-index: 5;
+}
+.match-card:hover::after { left: 200%; }
+
+/* Match Meta (League / Time) */
+.match-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.match-league {
+  color: var(--neon-gold);
+  background: rgba(244,200,66,0.1);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(244,200,66,0.2);
+}
+.match-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Teams Area */
+.match-teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  text-align: center;
+  position: relative;
+}
+
+.match-team {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.match-team__logo-wrap {
+  width: 60px;
+  height: 60px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 50%;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 4px 10px rgba(0,0,0,0.3);
+}
+.match-team__logo-wrap img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+.match-team__name {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.match-vs {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 900;
+  color: rgba(155,93,229,0.7);
+  padding: 0 10px;
+  text-shadow: 0 0 10px rgba(155,93,229,0.3);
+}
+
+/* Odds Area */
+.match-odds {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.odd-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-md);
+  padding: 12px 6px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+}
+.odd-btn:hover {
+  background: rgba(155,93,229,0.1);
+  border-color: rgba(155,93,229,0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(155,93,229,0.2);
+}
+.odd-btn:active { transform: scale(0.95); }
+
+.odd-btn.is-selected {
+  background: linear-gradient(135deg, rgba(155,93,229,0.8), rgba(199,125,255,0.8));
+  border-color: var(--neon-violet);
+  box-shadow: 0 0 20px rgba(155,93,229,0.4);
+  transform: scale(1.05);
+}
+.odd-btn.is-selected .odd-label,
+.odd-btn.is-selected .odd-val {
+  color: #fff;
+}
+
+.odd-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.odd-val {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--neon-gold);
+  transition: color 0.2s;
+}

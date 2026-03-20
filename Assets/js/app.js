@@ -7,6 +7,10 @@
 
 'use strict';
 
+/* ─── DEV MODE (set false en producción) ─────────────── */
+const DEV_MODE = true;
+const DEV_USER = { id: 99999999, first_name: 'Tester', last_name: 'Dev', photo_url: '' };
+
 /* ─── Telegram WebApp detection ──────────────────────── */
 const TG = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 
@@ -21,6 +25,8 @@ let _rafBit = null;   // requestAnimationFrame handle
 const $loader = document.getElementById('app-loader');
 const $screenGate = document.getElementById('screen-no-telegram');
 const $screenApp = document.getElementById('screen-app');
+const $screenGames = document.getElementById('screen-games');
+
 const $userName = document.getElementById('user-name');
 const $userLevel = document.getElementById('user-level');
 const $levelNum = document.getElementById('level-num');
@@ -32,6 +38,9 @@ const $statLevel = document.getElementById('stat-level');
 const $statXP = document.getElementById('stat-xp');
 const $statGames = document.getElementById('stat-games');
 const $slogan = document.getElementById('casino-slogan');
+
+const $gamesContainer = document.getElementById('gamesContainer');
+const $gamesUserBits = document.getElementById('games-user-bits');
 
 /* ═══════════════════════════════════════════════════════
    BOOT
@@ -54,7 +63,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     _loadSlogan();
 
     // ── Detect user ──────────────────────────────────
-    const tgUser = TG && TG.initDataUnsafe && TG.initDataUnsafe.user;
+    const tgUser = (TG && TG.initDataUnsafe && TG.initDataUnsafe.user)
+                 || (DEV_MODE ? DEV_USER : null);
 
     if (tgUser && tgUser.id) {
         _userId = 'tg_' + tgUser.id;
@@ -71,22 +81,31 @@ document.addEventListener('DOMContentLoaded', async () => {
    SHOW / HIDE SCREENS
 ═══════════════════════════════════════════════════════ */
 function _showScreen(name) {
-    $screenGate.classList.remove('is-active');
-    $screenApp.classList.remove('is-active');
+    if ($screenGate) $screenGate.classList.remove('is-active');
+    if ($screenApp) $screenApp.classList.remove('is-active');
+    if ($screenGames) $screenGames.classList.remove('is-active');
 
     if (name === 'gate') {
-        $screenGate.setAttribute('aria-hidden', 'false');
-        $screenApp.setAttribute('aria-hidden', 'true');
-        requestAnimationFrame(() => $screenGate.classList.add('is-active'));
-    } else {
-        $screenGate.setAttribute('aria-hidden', 'true');
-        $screenApp.setAttribute('aria-hidden', 'false');
-        requestAnimationFrame(() => $screenApp.classList.add('is-active'));
+        if ($screenGate) $screenGate.setAttribute('aria-hidden', 'false');
+        if ($screenApp) $screenApp.setAttribute('aria-hidden', 'true');
+        if ($screenGames) $screenGames.setAttribute('aria-hidden', 'true');
+        requestAnimationFrame(() => { if ($screenGate) $screenGate.classList.add('is-active'); });
+    } else if (name === 'app') {
+        if ($screenGate) $screenGate.setAttribute('aria-hidden', 'true');
+        if ($screenApp) $screenApp.setAttribute('aria-hidden', 'false');
+        if ($screenGames) $screenGames.setAttribute('aria-hidden', 'true');
+        requestAnimationFrame(() => { if ($screenApp) $screenApp.classList.add('is-active'); });
+    } else if (name === 'games') {
+        if ($screenGate) $screenGate.setAttribute('aria-hidden', 'true');
+        if ($screenApp) $screenApp.setAttribute('aria-hidden', 'true');
+        if ($screenGames) $screenGames.setAttribute('aria-hidden', 'false');
+        requestAnimationFrame(() => { if ($screenGames) $screenGames.classList.add('is-active'); });
+        _loadGames(); // Fetch and render games when opening the screen
     }
 
     // Hide loader
     setTimeout(() => {
-        $loader.classList.add('is-hidden');
+        if ($loader) $loader.classList.add('is-hidden');
     }, 350);
 }
 
@@ -194,10 +213,12 @@ function _animateBits(from, to) {
         const eased = 1 - Math.pow(1 - progress, 3);
         const current = Math.round(from + diff * eased);
         if ($userBits) $userBits.textContent = current.toLocaleString();
+        if ($gamesUserBits) $gamesUserBits.textContent = current.toLocaleString();
         if (progress < 1) {
             _rafBit = requestAnimationFrame(tick);
         } else {
             if ($userBits) $userBits.textContent = to.toLocaleString();
+            if ($gamesUserBits) $gamesUserBits.textContent = to.toLocaleString();
         }
     }
     _rafBit = requestAnimationFrame(tick);
@@ -253,8 +274,16 @@ function _bindEvents() {
     if ($btnPlay) {
         $btnPlay.addEventListener('click', () => {
             _haptic('light');
-            // TODO: route to the games section; hook to your main game page
-            _toast('¡Buena suerte, jugador! 🎰');
+            _showScreen('games');
+        });
+    }
+
+    // ── Back from Games ────────────────────────────
+    const $btnBackGames = document.getElementById('btn-back-games');
+    if ($btnBackGames) {
+        $btnBackGames.addEventListener('click', () => {
+            _haptic('light');
+            _showScreen('app');
         });
     }
 
@@ -263,7 +292,7 @@ function _bindEvents() {
     if ($btnSports) {
         $btnSports.addEventListener('click', () => {
             _haptic('light');
-            _toast('Apuestas Deportivas proximamente ⚽');
+            window.location.href = 'Views/servicios.html';
         });
     }
 
@@ -392,7 +421,79 @@ function _esc(str) {
         .replace(/"/g, '&quot;');
 }
 
+/* ═══════════════════════════════════════════════════════
+   GAMES FETCH & RENDER
+═══════════════════════════════════════════════════════ */
+let _gamesLoaded = false;
+
+function _loadGames() {
+    if (_gamesLoaded) return; // Load only once
+    _gamesLoaded = true;
+
+    if ($gamesContainer) {
+        $gamesContainer.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">Cargando juegos... <span class="loader__skull" style="display:inline-block; font-size:24px; animation: skullFloat 2s ease-in-out infinite;">💀</span></div>';
+    }
+
+    Database.ref('games').once('value').then(snap => {
+        if (!snap.exists()) {
+            _renderGamesMock();
+        } else {
+            renderGames(snap.val());
+        }
+    }).catch(err => {
+        console.error('[App] Error al cargar juegos:', err);
+        _renderGamesMock(); // Fallback to mock on error
+    });
+}
+
+function renderGames(games) {
+    if (!$gamesContainer) return;
+    $gamesContainer.innerHTML = '';
+
+    if (!games || Object.keys(games).length === 0) {
+        $gamesContainer.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-muted);">No hay juegos disponibles en este momento.</div>';
+        return;
+    }
+
+    Object.entries(games).forEach(([gameId, game]) => {
+        // Build card HTML
+        const badgeHtml = game.badge ? `<span class="game-card__badge">${_esc(game.badge)}</span>` : '';
+        const playStr = `_toast('Entrando a ${_esc(game.name || 'Juego')}... 🎲');`;
+
+        const html = `
+            <div class="game-card">
+              ${badgeHtml}
+              <div class="game-card__image">
+                <img src="${game.image || 'https://images.unsplash.com/photo-1605870445919-838d190e8e1b?auto=format&fit=crop&w=600&q=80'}" alt="${_esc(game.name || 'Juego')}" loading="lazy" />
+                <div class="game-card__overlay"></div>
+              </div>
+              <div class="game-card__content">
+                <h3 class="game-card__title">${_esc(game.name || 'Juego')}</h3>
+                <p class="game-card__desc">${_esc(game.description || 'Juego premium de Ghost Plague Casino.')}</p>
+                <button class="game-card__btn" onclick="${playStr}">
+                  <span class="btn__text">Jugar</span>
+                  <span class="game-card__btn-glow"></span>
+                </button>
+              </div>
+            </div>
+        `;
+        $gamesContainer.insertAdjacentHTML('beforeend', html);
+    });
+}
+
+function _renderGamesMock() {
+    // Premium fallback data for testing the UI if Firebase has no games
+    const mockData = {
+        'blackjack': { name: 'Blackjack VIP', description: 'La mesa más exclusiva. Desafía al crupier y gana a lo grande.', image: 'https://images.unsplash.com/photo-1606167668149-b0f8d168241c?auto=format&fit=crop&w=600&q=80', badge: 'HOT' },
+        'roulette': { name: 'Ruleta Europea', description: 'Gira la ruleta mágica. Cada número podría cambiar tu destino.', image: 'https://images.unsplash.com/photo-1605870445919-838d190e8e1b?auto=format&fit=crop&w=600&q=80' },
+        'slots': { name: 'Plague Slots', description: 'Slots temáticos de Ghost Plague. ¡Busca las tres calaveras doradas!', image: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?auto=format&fit=crop&w=600&q=80', badge: 'NEW' },
+        'poker': { name: "Texas Hold'em", description: 'Torneos diarios con botes acumulados gigantescos. Juega contra los mejores.', image: 'https://images.unsplash.com/photo-1541278107931-e006523892df?auto=format&fit=crop&w=600&q=80' }
+    };
+    renderGames(mockData);
+}
+
 /* ─── Public API (for admin/linkage if needed) ───────── */
 window.renderUser = renderUser;
 window.renderBalance = renderBalance;
 window.renderSlogan = renderSlogan;
+window.renderGames = renderGames; // Exposed for dynamic injected data
