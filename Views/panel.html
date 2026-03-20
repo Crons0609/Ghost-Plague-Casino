@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../Assets/css/admin.css">
+    <link rel="stylesheet" href="../Assets/css/telegram.css">
 </head>
 <body class="theme-dark">
 
@@ -16,11 +17,11 @@
         <div class="loader-spinner"></div>
     </div>
 
-    <!-- TOAST NOTIFICATIONS CONTAINER -->
+    <!-- TOAST NOTIFICATIONS -->
     <div id="toastContainer" class="toast-container"></div>
 
     <!-- ═══════════════════════════════════════════
-         PANTALLA DE LOGIN
+         LOGIN SCREEN
     ════════════════════════════════════════════ -->
     <div id="loginScreen" class="login-wrapper" style="display: none;">
         <div class="login-glass">
@@ -51,16 +52,58 @@
                 <button type="submit" id="loginBtn" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
                     Acceder <i class="fas fa-arrow-right"></i>
                 </button>
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <a href="#" id="showRegisterLink" style="color: var(--primary); font-size: 0.9rem; text-decoration: none;">¿No tienes cuenta? Crear Administrador</a>
+                </div>
+            </form>
+
+            <form id="adminRegisterForm" style="display: none;">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <div class="input-container">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="regName" placeholder="Juan Pérez" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <div class="input-container">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="regEmail" placeholder="admin@ghostcasino.com" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <div class="input-container">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" required minlength="6">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Clave Maestra (Seguridad)</label>
+                    <div class="input-container">
+                        <i class="fa-solid fa-key"></i>
+                        <input type="password" id="regMasterKey" placeholder="Clave secreta del casino" required>
+                    </div>
+                </div>
+                
+                <div id="regErrorMsg" class="error-text"></div>
+                
+                <button type="submit" id="regBtn" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
+                    Crear Cuenta <i class="fas fa-user-plus"></i>
+                </button>
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <a href="#" id="showLoginLink" style="color: var(--text-muted); font-size: 0.9rem; text-decoration: none;"><i class="fas fa-arrow-left"></i> Volver al Login</a>
+                </div>
             </form>
         </div>
     </div>
 
     <!-- ═══════════════════════════════════════════
-         PANTALLA DEL PANEL (SPA)
+         ADMIN PANEL (SPA)
     ════════════════════════════════════════════ -->
     <div id="adminScreen" class="admin-layout" style="display: none;">
         
-        <!-- SIDEBAR OVERLAY (MOBILE) -->
         <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
         <!-- SIDEBAR -->
@@ -69,23 +112,48 @@
                 <i class="fa-solid fa-ghost"></i> <span>Ghost Admin</span>
             </div>
 
+            <!-- User badge -->
+            <div class="sidebar-user">
+                <div class="sb-avatar" id="sbAvatarInitials">A</div>
+                <div class="sb-user-info">
+                    <span class="sb-name" id="sbAdminName">Admin</span>
+                    <span class="sb-role" id="sbAdminRole">ADMIN</span>
+                </div>
+            </div>
+
             <nav class="sidebar-nav">
-                <div class="nav-group-title">General</div>
+                <div class="nav-group-title">OVERVIEW</div>
                 <a href="#" class="nav-item active" data-view="view-dashboard">
                     <i class="fas fa-chart-line"></i> <span>Dashboard</span>
                 </a>
 
-                <div class="nav-group-title">Seguridad</div>
+                <div class="nav-group-title">GESTIÓN</div>
+                <a href="#" class="nav-item" data-view="view-players">
+                    <i class="fas fa-users"></i> <span>Players</span>
+                </a>
+                <a href="#" class="nav-item" data-view="view-missions">
+                    <i class="fas fa-bullseye"></i> <span>Missions</span>
+                </a>
+
+                <div class="nav-group-title">REPORTES</div>
+                <a href="#" class="nav-item" data-view="view-historial">
+                    <i class="fas fa-history"></i> <span>Historial</span>
+                </a>
+
+                <div class="nav-group-title">HERRAMIENTAS</div>
+                <a href="#" class="nav-item" data-view="view-telegram">
+                    <i class="fab fa-telegram-plane"></i> <span>Telegram Bot</span>
+                </a>
+
+                <div class="nav-group-title">SISTEMA</div>
                 <a href="#" class="nav-item" data-view="view-admins">
-                    <i class="fas fa-user-shield"></i> <span>Administradores</span>
+                    <i class="fas fa-user-shield"></i> <span>Admins</span>
+                </a>
+                <a href="#" class="nav-item" data-view="view-temas">
+                    <i class="fas fa-palette"></i> <span>Temas Globales</span>
                 </a>
 
-                <div class="nav-group-title">Sistema</div>
-                <a href="#" class="nav-item" data-view="view-config">
-                    <i class="fas fa-cog"></i> <span>Configuración</span>
-                </a>
-
-                <a href="#" class="nav-item logout" id="logoutBtn">
+                <a href="#" class="nav-item logout" id="logoutBtn" style="margin-top: auto;">
                     <i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span>
                 </a>
             </nav>
@@ -98,15 +166,10 @@
                 <button class="mobile-toggle" id="mobileToggle">
                     <i class="fas fa-bars"></i>
                 </button>
-
-                <div class="topbar-search">
-                    <div class="input-container search-bar">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Buscar en el panel...">
-                    </div>
-                </div>
-
+                <div class="topbar-title" id="topbarTitle">Casino Overview</div>
                 <div class="topbar-actions">
+                    <div class="topbar-date" id="topbarDate"></div>
+                    <button class="topbar-bell"><i class="fas fa-bell"></i></button>
                     <div class="user-profile">
                         <div class="avatar" id="navAvatarInitials">A</div>
                         <div class="user-info">
@@ -119,41 +182,361 @@
 
             <!-- VIEWS CONTAINER -->
             <div class="views-container">
-                
-                <!-- VIEW: DASHBOARD -->
-                <section id="view-dashboard" class="view-section active">
-                    <div class="page-title">
-                        <h1>Dashboard General</h1>
-                        <p>Resumen del sistema administrativo.</p>
-                    </div>
 
-                    <div class="kpi-grid">
-                        <div class="kpi-card">
+                <!-- ───────────────────────────────────────
+                     VIEW: DASHBOARD
+                ─────────────────────────────────────── -->
+                <section id="view-dashboard" class="view-section active">
+                    
+                    <!-- Resumen General -->
+                    <div class="dash-section-title">Resumen General</div>
+                    <div class="kpi-grid kpi-grid-4">
+                        <div class="kpi-card kpi-neutral">
                             <div class="kpi-icon"><i class="fas fa-users"></i></div>
                             <div class="kpi-info">
-                                <h3>Total Admins</h3>
-                                <div class="kpi-value" id="kpiTotalAdmins">0</div>
+                                <h3>TOTAL REGISTRADOS</h3>
+                                <div class="kpi-value" id="kpiTotalRegistrados">—</div>
                             </div>
                         </div>
-                        <div class="kpi-card">
-                            <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);"><i class="fas fa-check-circle"></i></div>
+                        <div class="kpi-card kpi-neutral">
+                            <div class="kpi-icon"><i class="fas fa-gamepad"></i></div>
                             <div class="kpi-info">
-                                <h3>Activos</h3>
-                                <div class="kpi-value" id="kpiActiveAdmins">0</div>
+                                <h3>JUGADORES ACTIVOS</h3>
+                                <div class="kpi-value" id="kpiJugadoresActivos">—</div>
                             </div>
                         </div>
-                        <div class="kpi-card">
-                            <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);"><i class="fas fa-user-plus"></i></div>
+                        <div class="kpi-card kpi-neutral">
+                            <div class="kpi-icon"><i class="fas fa-coins"></i></div>
                             <div class="kpi-info">
-                                <h3>Nuevos (Mes)</h3>
-                                <div class="kpi-value">0</div>
+                                <h3>BITS EN ECONOMÍA</h3>
+                                <div class="kpi-value" id="kpiBitsEconomia">—</div>
+                            </div>
+                        </div>
+                        <div class="kpi-card kpi-neutral">
+                            <div class="kpi-icon"><i class="fas fa-chart-bar"></i></div>
+                            <div class="kpi-info">
+                                <h3>GANANCIA CASINO (BITS)</h3>
+                                <div class="kpi-value" id="kpiGananciaCasinoBits">—</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ingresos y Flujo USD -->
+                    <div class="dash-section-title">
+                        <span class="section-icon green">💵</span> Ingresos y Flujo USD
+                    </div>
+                    <div class="kpi-grid kpi-grid-5">
+                        <div class="kpi-card kpi-red">
+                            <div class="kpi-info">
+                                <h3>INGRESOS (HISTÓRICO)</h3>
+                                <div class="kpi-value" id="kpiIngresosHistorico">$0.00</div>
+                            </div>
+                            <div class="kpi-bg-icon"><i class="fas fa-dollar-sign"></i></div>
+                        </div>
+                        <div class="kpi-card kpi-red">
+                            <div class="kpi-info">
+                                <h3>RETIROS (HISTÓRICO)</h3>
+                                <div class="kpi-value" id="kpiRetirosHistorico">$0.00</div>
+                            </div>
+                            <div class="kpi-bg-icon"><i class="fas fa-money-bill-wave"></i></div>
+                        </div>
+                        <div class="kpi-card kpi-green">
+                            <div class="kpi-info">
+                                <h3>GANANCIA NETA (HOY)</h3>
+                                <div class="kpi-value" id="kpiGananciaHoy">$0.00</div>
+                            </div>
+                            <div class="kpi-bg-icon"><i class="fas fa-calendar-day"></i></div>
+                        </div>
+                        <div class="kpi-card kpi-green">
+                            <div class="kpi-info">
+                                <h3>GANANCIA NETA (SEMANA)</h3>
+                                <div class="kpi-value" id="kpiGananciaSemana">$0.00</div>
+                            </div>
+                            <div class="kpi-bg-icon"><i class="fas fa-calendar-week"></i></div>
+                        </div>
+                        <div class="kpi-card kpi-green">
+                            <div class="kpi-info">
+                                <h3>GANANCIA NETA (MES)</h3>
+                                <div class="kpi-value" id="kpiGananciaMes">$0.00</div>
+                            </div>
+                            <div class="kpi-bg-icon"><i class="fas fa-calendar-alt"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Economía Interna (Bits) -->
+                    <div class="dash-section-title">
+                        <span class="section-icon yellow">🪙</span> Economía Interna (Bits)
+                    </div>
+                    <div class="kpi-grid kpi-grid-3">
+                        <div class="kpi-card kpi-yellow">
+                            <div class="kpi-info">
+                                <h3>GANANCIA (HOY)</h3>
+                                <div class="kpi-value" id="kpiBitsHoy">0 Bits</div>
+                            </div>
+                            <div class="kpi-bg-icon"><i class="fas fa-calendar-day"></i></div>
+                        </div>
+                        <div class="kpi-card kpi-yellow">
+                            <div class="kpi-info">
+                                <h3>GANANCIA (SEMANA)</h3>
+                                <div class="kpi-value" id="kpiBitsSemana">0 Bits</div>
+                            </div>
+                            <div class="kpi-bg-icon"><i class="fas fa-calendar-week"></i></div>
+                        </div>
+                        <div class="kpi-card kpi-yellow">
+                            <div class="kpi-info">
+                                <h3>GANANCIA (MES)</h3>
+                                <div class="kpi-value" id="kpiBitsMes">0 Bits</div>
+                            </div>
+                            <div class="kpi-bg-icon"><i class="fas fa-calendar-alt"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Volumen de Transacciones -->
+                    <div class="dash-section-title">
+                        <span class="section-icon blue">↕️</span> Volumen de Transacciones
+                    </div>
+                    <div class="kpi-grid kpi-grid-4">
+                        <div class="kpi-card kpi-blue">
+                            <div class="kpi-info">
+                                <h3>TOTALES (HISTÓRICO)</h3>
+                                <div class="kpi-value" id="kpiTxHistorico">—</div>
+                            </div>
+                            <div class="kpi-bg-icon"><i class="fas fa-exchange-alt"></i></div>
+                        </div>
+                        <div class="kpi-card kpi-blue">
+                            <div class="kpi-info">
+                                <h3>VOLUMEN (HOY)</h3>
+                                <div class="kpi-value" id="kpiTxHoy">—</div>
+                            </div>
+                            <div class="kpi-bg-icon"><i class="fas fa-exchange-alt"></i></div>
+                        </div>
+                        <div class="kpi-card kpi-blue">
+                            <div class="kpi-info">
+                                <h3>VOLUMEN (SEMANA)</h3>
+                                <div class="kpi-value" id="kpiTxSemana">—</div>
+                            </div>
+                            <div class="kpi-bg-icon"><i class="fas fa-exchange-alt"></i></div>
+                        </div>
+                        <div class="kpi-card kpi-blue">
+                            <div class="kpi-info">
+                                <h3>VOLUMEN (MES)</h3>
+                                <div class="kpi-value" id="kpiTxMes">—</div>
+                            </div>
+                            <div class="kpi-bg-icon"><i class="fas fa-exchange-alt"></i></div>
+                        </div>
+                    </div>
+
+                    <!-- Game Stats + Activity Row -->
+                    <div class="dash-bottom-row">
+                        <div class="content-card dash-game-card">
+                            <div class="card-header">
+                                <h3 style="margin:0;font-size:1.1rem;"><i class="fas fa-gamepad" style="color:var(--primary);"></i> Top Juegos — Estadísticas en Vivo</h3>
+                                <span id="gameStatsLoader" style="color:var(--text-muted);font-size:0.82rem;"><i class="fas fa-spinner fa-spin"></i></span>
+                            </div>
+                            <div class="card-body">
+                                <div class="game-kpi-row">
+                                    <div class="game-kpi-pill"><span id="gstkTotalGames">—</span><label>Tipos de Juego</label></div>
+                                    <div class="game-kpi-pill"><span id="gstkTotalPlays">—</span><label>Partidas Total</label></div>
+                                    <div class="game-kpi-pill"><span id="gstkTopGame">—</span><label>Juego #1</label></div>
+                                </div>
+                                <div id="gameStatsContainer" class="game-stats-list">
+                                    <div class="game-stats-empty"><i class="fas fa-dice-d20"></i><p>No hay historial aún</p></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-card dash-activity-card">
+                            <div class="card-header">
+                                <h3 style="margin:0;font-size:1.1rem;"><i class="fas fa-bolt" style="color:var(--warning);"></i> Actividad Reciente</h3>
+                            </div>
+                            <div class="card-body" style="padding:0;">
+                                <div id="activityFeed" class="activity-feed">
+                                    <div style="text-align:center;padding:2rem;color:var(--text-muted);"><i class="fas fa-spinner fa-spin"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- ───────────────────────────────────────
+                     VIEW: PLAYERS
+                ─────────────────────────────────────── -->
+                <section id="view-players" class="view-section">
+                    <div class="content-card">
+                        <div class="card-header" style="flex-direction: column; align-items: stretch; gap: 1rem;">
+                            <div class="flex-header">
+                                <h2><i class="fas fa-users"></i> Gestión de Players</h2>
+                            </div>
+                            <div class="filters-bar" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                                <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+                                    <input type="text" id="playerSearchInput" class="form-control" placeholder="Buscar por Nombre, Email o ID de Telegram..." onkeyup="filterPlayersTable()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table" id="playersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID (Telegram)</th>
+                                            <th>Jugador</th>
+                                            <th>Nivel</th>
+                                            <th>XP</th>
+                                            <th>Bits</th>
+                                            <th>Partidas</th>
+                                            <th style="text-align:right;">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="playersTableBody">
+                                        <tr><td colspan="6" style="text-align:center;">Cargando players...</td></tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- VIEW: ADMINS -->
+                <!-- ───────────────────────────────────────
+                     VIEW: MISSIONS
+                ─────────────────────────────────────── -->
+                <section id="view-missions" class="view-section">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <div class="flex-header">
+                                <h2><i class="fas fa-bullseye"></i> Gestión de Misiones</h2>
+                                <button class="btn-primary" id="openAddMissionBtn"><i class="fas fa-plus"></i> Nueva Misión</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="missionsList" class="missions-grid">
+                                <div style="text-align:center; padding: 2rem; color:var(--text-muted); width: 100%;">
+                                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                                    <p style="margin-top:1rem;">Cargando misiones...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ───────────────────────────────────────
+                     VIEW: HISTORIAL
+                ─────────────────────────────────────── -->
+                <section id="view-historial" class="view-section">
+                    
+                    <!-- KPI Dashboard for History -->
+                    <div class="kpi-grid-5" style="margin-bottom: 2rem;">
+                        <div class="kpi-card">
+                            <div class="kpi-icon"><i class="fas fa-gamepad"></i></div>
+                            <div class="kpi-content">
+                                <p>Partidas Totales</p>
+                                <h3 id="histTotalPartidas">0</h3>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon" style="background:rgba(16, 185, 129, 0.1); color:var(--success);"><i class="fas fa-trophy"></i></div>
+                            <div class="kpi-content">
+                                <p>Total Ganadas</p>
+                                <h3 id="histTotalGanadas">0</h3>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon" style="background:rgba(239, 68, 68, 0.1); color:var(--danger);"><i class="fas fa-times-circle"></i></div>
+                            <div class="kpi-content">
+                                <p>Total Perdidas</p>
+                                <h3 id="histTotalPerdidas">0</h3>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon" style="background:rgba(59, 130, 246, 0.1); color:#3b82f6;"><i class="fas fa-arrow-up"></i></div>
+                            <div class="kpi-content">
+                                <p>Bits Ganados</p>
+                                <h3 id="histBitsGanados">0</h3>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon" style="background:rgba(245, 158, 11, 0.1); color:#f59e0b;"><i class="fas fa-arrow-down"></i></div>
+                            <div class="kpi-content">
+                                <p>Bits Perdidos</p>
+                                <h3 id="histBitsPerdidos">0</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-card">
+                        <div class="card-header" style="flex-direction: column; align-items: stretch; gap: 1rem;">
+                            <div class="flex-header">
+                                <h2><i class="fas fa-history"></i> Historial Analítico de Juegos</h2>
+                            </div>
+                            
+                            <!-- Filters Bar -->
+                            <div class="filters-bar" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                                <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
+                                    <input type="text" id="histSearchInput" class="form-control" placeholder="Buscar usuario o email...">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0; min-width: 150px;">
+                                    <select id="histTypeFilter" class="form-control">
+                                        <option value="all">Tipos (Todos)</option>
+                                        <option value="apuesta">Apuestas</option>
+                                        <option value="juego">Juegos</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0; min-width: 150px;">
+                                    <select id="histResultFilter" class="form-control">
+                                        <option value="all">Resultado (Todos)</option>
+                                        <option value="ganado">Ganados</option>
+                                        <option value="perdido">Perdidos</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <input type="date" id="histDateFilter" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table responsive-table" id="historialTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Usuario (Click para Detalle)</th>
+                                            <th>Juego</th>
+                                            <th>Tipo</th>
+                                            <th>Resultado</th>
+                                            <th>Bits (+/-)</th>
+                                            <th>Balance Disp.</th>
+                                            <th>Fecha y Hora</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="historialTableBody">
+                                        <tr><td colspan="7" style="text-align:center;">Cargando historial analítico...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ───────────────────────────────────────
+                     VIEW: ADMINS
+                ─────────────────────────────────────── -->
                 <section id="view-admins" class="view-section">
+
+                    <!-- KPI Row -->
+                    <div class="kpi-grid" style="margin-bottom:1.5rem; display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:1rem;">
+                        <div class="kpi-card">
+                            <div class="kpi-icon"><i class="fas fa-users"></i></div>
+                            <div class="kpi-content"><p>Total Admins</p><h3 id="kpiTotalAdmins">0</h3></div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon" style="background:rgba(16,185,129,0.1);color:var(--success);"><i class="fas fa-user-check"></i></div>
+                            <div class="kpi-content"><p>Activos</p><h3 id="kpiActiveAdmins">0</h3></div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-icon" style="background:rgba(245,158,11,0.1);color:#f59e0b;"><i class="fas fa-crown"></i></div>
+                            <div class="kpi-content"><p>Superadmins</p><h3 id="kpiSuperAdmins">0</h3></div>
+                        </div>
+                    </div>
+
                     <div class="content-card">
                         <div class="card-header">
                             <div class="flex-header">
@@ -168,15 +551,16 @@
                                 <table class="data-table" id="adminsTable">
                                     <thead>
                                         <tr>
-                                            <th>Usuario (Email)</th>
-                                            <th>Nombre Completo</th>
+                                            <th>Email</th>
+                                            <th>Nombre</th>
                                             <th>Rol</th>
                                             <th>Estado</th>
+                                            <th>Fecha Creación</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr><td colspan="5" style="text-align: center;">Cargando administradores...</td></tr>
+                                        <tr><td colspan="6" style="text-align: center;">Cargando administradores...</td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -184,24 +568,271 @@
                     </div>
                 </section>
 
-                <!-- VIEW: CONFIGURATION -->
-                <section id="view-config" class="view-section">
-                    <div class="content-card">
+                <!-- ───────────────────────────────────────
+                     VIEW: TELEGRAM BOT
+                ─────────────────────────────────────── -->
+                <section id="view-telegram" class="view-section">
+
+                    <div class="content-card" style="margin-bottom:1.5rem;">
                         <div class="card-header">
-                            <h2><i class="fas fa-cog"></i> Configuración Global</h2>
+                            <div class="flex-header">
+                                <h2><i class="fab fa-telegram-plane" style="color:#2CA5E0;"></i> CRM Integrado: Telegram Bot</h2>
+                                <div id="tgBotStatus" class="tg-status-badge tg-status-off" style="display:none;"></div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p style="color: var(--text-muted);">Las opciones de configuración estarán disponibles próximamente.</p>
+                    </div>
+
+                    <div class="tg-crm-grid">
+                        <!-- Left Column: Client List -->
+                        <div class="tg-column-left">
+                            <div class="content-card" style="height: 100%; display: flex; flex-direction: column;">
+                                <div class="card-header" style="flex-shrink: 0; flex-direction: column; gap: 0.75rem;">
+                                    <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                                        <h3 style="margin: 0; font-size: 1.1rem;"><i class="fas fa-users"></i> Clientes Suscritos</h3>
+                                        <span class="tg-count-badge"><span id="tgClientCount">0</span> activos</span>
+                                    </div>
+                                    <div class="tg-search-box">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" id="tgSearchInput" placeholder="Buscar por nombre o ID..." autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="card-body" style="flex: 1; overflow-y: auto; padding: 0.5rem;" id="tgClientsWrapper">
+                                    <div style="text-align:center; padding: 2rem; color:var(--text-muted); width: 100%;">
+                                        <i class="fas fa-spinner fa-spin fa-2x"></i>
+                                        <p style="margin-top:1rem;">Cargando base de datos...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Message Form -->
+                        <div class="tg-column-right">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h3 style="margin: 0; font-size: 1.1rem;"><i class="fas fa-paper-plane"></i> Enviar Alerta Directa</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form id="tgMessageForm">
+                                        
+                                        <!-- Token Configuration -->
+                                        <div class="form-group">
+                                            <label>Bot Token API (Requerido para enviar)</label>
+                                            <div class="input-container">
+                                                <i class="fas fa-key"></i>
+                                                <input type="text" id="tgTokenInput" class="form-control" placeholder="123456789:ABCdef..." autocomplete="off">
+                                            </div>
+                                            <small style="color:var(--text-muted); display:flex; justify-content:flex-end; margin-top:5px;"><a href="#" id="tgSaveTokenLayoutBtn" style="color:var(--primary);text-decoration:none;"><i class="fas fa-save"></i> Guardar Token Fijo</a></small>
+                                        </div>
+
+                                        <div class="form-group mt-3">
+                                            <label>Destinatario (Selección en la lista, o Global)</label>
+                                            <select id="tgMsgTarget" class="form-control">
+                                                <option value="" disabled selected>-- Elija un usuario o broadcast --</option>
+                                                <option value="all">📢 Broadcast (Todos los clientes)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Mensaje Corporativo / Personalizado</label>
+                                            <textarea id="tgMsgText" class="form-control" rows="8" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                                        </div>
+                                        
+                                        <div id="tgSendResult" style="margin-bottom: 1rem; text-align: center; font-size:0.9rem;"></div>
+                                        
+                                        <button type="submit" class="btn-primary w-100" id="tgSendBtn" style="padding: 12px; font-size: 1rem;">
+                                            <i class="fas fa-paper-plane"></i> Despachar Mensaje
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
+
+                <!-- ───────────────────────────────────────
+                     VIEW: TEMAS GLOBALES
+                ─────────────────────────────────────── -->
+                <section id="view-temas" class="view-section">
+
+                    <!-- Header Row -->
+                    <div class="tp-header-row">
+                        <div>
+                            <h2 style="margin:0; font-size:1.5rem;"><i class="fas fa-palette" style="color:var(--primary);"></i> Sistema de Temas Globales</h2>
+                            <p style="color:var(--text-muted); margin-top:0.25rem; font-size:0.9rem;">Los cambios se aplican en tiempo real y se guardan en Firebase para todo el sistema.</p>
+                        </div>
+                        <div style="display:flex; gap:0.75rem; flex-shrink:0;">
+                            <button id="resetThemeBtn" class="btn-secondary">
+                                <i class="fas fa-undo"></i> Restablecer
+                            </button>
+                            <button id="saveThemeBtn" class="btn-primary">
+                                <i class="fas fa-save"></i> Guardar Tema
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="tp-grid">
+
+                        <!-- LEFT: Controls -->
+                        <div class="tp-controls">
+
+                            <!-- Presets -->
+                            <div class="content-card" style="margin-bottom:1.25rem;">
+                                <div class="card-header"><h3 style="margin:0;"><i class="fas fa-swatchbook"></i> Temas Predefinidos</h3></div>
+                                <div class="card-body">
+                                    <div class="tp-presets">
+                                        <button class="theme-preset-btn active" data-preset="casino-dark">🎰<span>Casino Oscuro</span></button>
+                                        <button class="theme-preset-btn" data-preset="neon">⚡<span>Neon</span></button>
+                                        <button class="theme-preset-btn" data-preset="gold-casino">👑<span>Gold Casino</span></button>
+                                        <button class="theme-preset-btn" data-preset="minimal-dark">◼<span>Minimal</span></button>
+                                        <button class="theme-preset-btn" data-preset="light">☀️<span>Claro</span></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mode Toggle -->
+                            <div class="content-card" style="margin-bottom:1.25rem;">
+                                <div class="card-header"><h3 style="margin:0;"><i class="fas fa-adjust"></i> Modo Visual</h3></div>
+                                <div class="card-body">
+                                    <div class="tp-mode-row">
+                                        <span><i class="fas fa-sun"></i> Modo Claro</span>
+                                        <label class="tp-toggle">
+                                            <input type="checkbox" id="tp-darkToggle" checked>
+                                            <span class="tp-slider"></span>
+                                        </label>
+                                        <span><i class="fas fa-moon"></i> Modo Oscuro</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Color Pickers -->
+                            <div class="content-card">
+                                <div class="card-header"><h3 style="margin:0;"><i class="fas fa-fill-drip"></i> Colores Personalizados</h3></div>
+                                <div class="card-body">
+                                    <div class="tp-pickers-grid">
+                                        <div class="tp-picker-item">
+                                            <label>Color Principal</label>
+                                            <div class="tp-picker-row">
+                                                <input type="color" id="tp-primary" class="theme-picker" value="#8b5cf6">
+                                                <span id="tp-primary-label">#8b5cf6</span>
+                                            </div>
+                                        </div>
+                                        <div class="tp-picker-item">
+                                            <label>Color Secundario</label>
+                                            <div class="tp-picker-row">
+                                                <input type="color" id="tp-secondary" class="theme-picker" value="#7c3aed">
+                                                <span id="tp-secondary-label">#7c3aed</span>
+                                            </div>
+                                        </div>
+                                        <div class="tp-picker-item">
+                                            <label>Fondo Principal</label>
+                                            <div class="tp-picker-row">
+                                                <input type="color" id="tp-bgMain" class="theme-picker" value="#0f172a">
+                                                <span id="tp-bgMain-label">#0f172a</span>
+                                            </div>
+                                        </div>
+                                        <div class="tp-picker-item">
+                                            <label>Texto Principal</label>
+                                            <div class="tp-picker-row">
+                                                <input type="color" id="tp-textMain" class="theme-picker" value="#f8fafc">
+                                                <span id="tp-textMain-label">#f8fafc</span>
+                                            </div>
+                                        </div>
+                                        <div class="tp-picker-item">
+                                            <label>Acento</label>
+                                            <div class="tp-picker-row">
+                                                <input type="color" id="tp-accent" class="theme-picker" value="#8b5cf6">
+                                                <span id="tp-accent-label">#8b5cf6</span>
+                                            </div>
+                                        </div>
+                                        <div class="tp-picker-item">
+                                            <label>Éxito</label>
+                                            <div class="tp-picker-row">
+                                                <input type="color" id="tp-success" class="theme-picker" value="#10b981">
+                                                <span id="tp-success-label">#10b981</span>
+                                            </div>
+                                        </div>
+                                        <div class="tp-picker-item">
+                                            <label>Peligro</label>
+                                            <div class="tp-picker-row">
+                                                <input type="color" id="tp-danger" class="theme-picker" value="#ef4444">
+                                                <span id="tp-danger-label">#ef4444</span>
+                                            </div>
+                                        </div>
+                                        <div class="tp-picker-item">
+                                            <label>Advertencia</label>
+                                            <div class="tp-picker-row">
+                                                <input type="color" id="tp-warning" class="theme-picker" value="#f59e0b">
+                                                <span id="tp-warning-label">#f59e0b</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Live hex label update -->
+                                    <script>
+                                    document.querySelectorAll('.theme-picker').forEach(function(p) {
+                                        var labelId = p.id + '-label';
+                                        p.addEventListener('input', function() {
+                                            var lbl = document.getElementById(labelId);
+                                            if (lbl) lbl.textContent = p.value;
+                                        });
+                                    });
+                                    </script>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- RIGHT: Preview -->
+                        <div class="tp-preview-col">
+                            <div class="content-card" style="position:sticky; top:1rem;">
+                                <div class="card-header"><h3 style="margin:0;"><i class="fas fa-eye"></i> Vista Previa en Vivo</h3></div>
+                                <div class="card-body">
+
+                                    <div id="themePreviewCard" class="tp-preview-card">
+                                        <!-- Mini sidebar mockup -->
+                                        <div class="tp-prev-sidebar">
+                                            <div class="tp-prev-brand"><i class="fas fa-ghost"></i> Ghost Admin</div>
+                                            <div class="tp-prev-nav-item active">Dashboard</div>
+                                            <div class="tp-prev-nav-item">Players</div>
+                                            <div class="tp-prev-nav-item">Temas</div>
+                                        </div>
+                                        <!-- Mini content -->
+                                        <div class="tp-prev-content">
+                                            <div class="tp-prev-topbar">Panel Administrativo</div>
+                                            <div class="tp-prev-kpi-row">
+                                                <div class="tp-prev-kpi">
+                                                    <div class="tp-prev-kpi-val">1,284</div>
+                                                    <div class="tp-prev-kpi-lbl">Players</div>
+                                                </div>
+                                                <div class="tp-prev-kpi">
+                                                    <div class="tp-prev-kpi-val">$48K</div>
+                                                    <div class="tp-prev-kpi-lbl">Revenue</div>
+                                                </div>
+                                            </div>
+                                            <div class="tp-prev-card">
+                                                <div class="tp-prev-btn">Guardar</div>
+                                                <div class="tp-prev-btn outline">Cancelar</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <p style="color:var(--text-muted); font-size:0.8rem; text-align:center; margin-top:1rem;">
+                                        <i class="fas fa-info-circle"></i> La vista previa se actualiza en tiempo real mientras ajustas los colores.
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
 
             </div>
         </main>
     </div>
 
     <!-- ═══════════════════════════════════════════
-         MODALS
+         MODAL: AÑADIR ADMIN
     ════════════════════════════════════════════ -->
     <div class="modal-overlay" id="addAdminModal">
         <div class="modal-container">
@@ -241,13 +872,321 @@
         </div>
     </div>
 
-    <!-- FIREBASE COMPAT SDKs (Para soporte offline web sin NodeJS) -->
+    <!-- ═══════════════════════════════════════════
+         MODAL: CREAR / EDITAR MISIÓN
+    ════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="missionModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="missionModalTitle">Nueva Misión</h2>
+                <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="missionForm">
+                    <input type="hidden" id="missionId" value="">
+                    
+                    <div class="form-group">
+                        <label>Título de la Misión *</label>
+                        <input type="text" id="missionTitle" class="form-control" placeholder="Ej. Primeros Pasos" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descripción *</label>
+                        <textarea id="missionDescription" class="form-control" placeholder="Ej. Gana 3 partidas para completar..." required rows="3"></textarea>
+                    </div>
+                    
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Tipo de Misión *</label>
+                            <select id="missionType" class="form-control" required>
+                                <option value="apuestas">Apuestas</option>
+                                <option value="juegos">Juegos</option>
+                                <option value="login diario">Login Diario</option>
+                                <option value="actividad">Actividad general</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Condición *</label>
+                            <input type="text" id="missionCondition" class="form-control" placeholder="Ej. apostar 5 veces" required>
+                        </div>
+                    </div>
+                    
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Tipo Recompensa *</label>
+                            <select id="missionRewardType" class="form-control" required>
+                                <option value="dinero">Dinero de la Cuenta</option>
+                                <option value="puntos">Puntos / Bits</option>
+                                <option value="bonus">Bonus / Giros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor de Recompensa *</label>
+                            <input type="number" id="missionRewardValue" class="form-control" placeholder="Ej. 1000" required min="1">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 1rem;">
+                        <label style="display:flex; align-items:center; cursor:pointer;">
+                            <span style="flex-grow:1; font-weight:600;">Misión Activa</span>
+                            <div class="toggle-switch-wrapper">
+                                <input type="checkbox" id="missionEstado" class="toggle-checkbox" checked>
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div id="missionErrorMsg" class="error-text"></div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary close-modal-btn">Cancelar</button>
+                        <button type="submit" class="btn-primary" id="saveMissionBtn"><i class="fas fa-save"></i> Guardar Misión</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         MODAL: DETALLE DEL USUARIO (HISTORIAL)
+    ════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="userHistoryModal">
+        <div class="modal-container" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-chart"></i> Estadísticas del Jugador</h2>
+                <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="background:var(--bg-main);">
+                
+                <h3 id="userHistoryName" style="margin-bottom: 0.5rem; color: var(--text-main);">Cargando...</h3>
+                <p id="userHistoryEmail" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Cargando...</p>
+
+                <!-- Personal KPIs -->
+                <div class="kpi-grid-5" style="margin-bottom: 2rem; gap: 1rem;">
+                    <div class="kpi-card" style="padding: 1rem;">
+                        <p style="font-size: 0.75rem; color:var(--text-muted);">Jugadas</p>
+                        <h3 id="uhTotalPartidas" style="font-size: 1.2rem;">0</h3>
+                    </div>
+                    <div class="kpi-card" style="padding: 1rem;">
+                        <p style="font-size: 0.75rem; color:var(--success);">Ganadas</p>
+                        <h3 id="uhTotalGanadas" style="font-size: 1.2rem;">0</h3>
+                    </div>
+                    <div class="kpi-card" style="padding: 1rem;">
+                        <p style="font-size: 0.75rem; color:var(--danger);">Perdidas</p>
+                        <h3 id="uhTotalPerdidas" style="font-size: 1.2rem;">0</h3>
+                    </div>
+                    <div class="kpi-card" style="padding: 1rem;">
+                        <p style="font-size: 0.75rem; color:#3b82f6;">Bits (+)</p>
+                        <h3 id="uhBitsGanados" style="font-size: 1.2rem;">0</h3>
+                    </div>
+                    <div class="kpi-card" style="padding: 1rem;">
+                        <p style="font-size: 0.75rem; color:#f59e0b;">Bits (-)</p>
+                        <h3 id="uhBitsPerdidos" style="font-size: 1.2rem;">0</h3>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <table class="data-table responsive-table" id="userIndividualTable">
+                            <thead>
+                                <tr>
+                                    <th>Juego</th>
+                                    <th>Tipo</th>
+                                    <th>Resultado</th>
+                                    <th>Bits (+/-)</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userIndividualTableBody">
+                                <!-- Filas individuales aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- ═══════════════════════════════════════════
+         MODAL: EDITAR JUGADOR
+    ════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="editPlayerModal">
+        <div class="modal-container" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-edit"></i> Editar Jugador</h2>
+                <button class="close-modal" onclick="closeModal('editPlayerModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="background:var(--bg-main);">
+                <form id="editPlayerForm">
+                    <input type="hidden" id="editPlayerUid">
+                    
+                    <div class="form-group">
+                        <label>Nombre del Jugador *</label>
+                        <input type="text" id="editPlayerName" class="form-control" placeholder="Nombre..." required>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                        <div class="form-group">
+                            <label>Nivel *</label>
+                            <input type="number" id="editPlayerLevel" class="form-control" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Experiencia (XP) *</label>
+                            <input type="number" id="editPlayerXP" class="form-control" min="0" required>
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                        <div class="form-group">
+                            <label>Bits *</label>
+                            <input type="number" id="editPlayerBits" class="form-control" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Partidas Jugadas *</label>
+                            <input type="number" id="editPlayerGames" class="form-control" min="0" required>
+                        </div>
+                    </div>
+
+                    <div id="editPlayerErrorMsg" style="color:var(--danger); font-size:0.85rem; margin-bottom:1rem; text-align:center;"></div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="closeModal('editPlayerModal')">Cancelar</button>
+                        <button type="submit" class="btn-primary" id="saveEditPlayerBtn"><i class="fas fa-save"></i> Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         MODAL: GESTIONAR BITS
+    ════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="transferBitsModal">
+        <div class="modal-container" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-coins"></i> Gestión de Bits</h2>
+                <button class="close-modal" onclick="closeModal('transferBitsModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="background:var(--bg-main);">
+                
+                <!-- Info del Usuario -->
+                <div style="background:var(--bg-card); padding:1rem; border-radius:8px; border:1px solid var(--border); margin-bottom:1.5rem;">
+                    <h3 id="transferUserName" style="margin-bottom:0.25rem; color:var(--text-main);">Cargando...</h3>
+                    <p id="transferUserEmail" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.5rem; display:none;"></p>
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:0.5rem; margin-top:0.5rem;">
+                        <span style="font-size:0.85rem; color:var(--text-muted);">Balance Actual:</span>
+                        <span id="transferUserBits" style="font-weight:700; color:var(--primary); font-size:1.1rem;">0</span>
+                    </div>
+                </div>
+
+                <form id="transferBitsForm" data-userid="">
+                    
+                    <div class="form-group">
+                        <label>Tipo de Operación *</label>
+                        <div style="display:flex; gap:1.5rem; margin-bottom:0.5rem; padding:0.5rem 0;">
+                            <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                                <input type="radio" name="transferType" value="add" checked> <span style="font-weight:600; color:var(--success);"><i class="fas fa-plus-circle"></i> Agregar Bits</span>
+                            </label>
+                            <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+                                <input type="radio" name="transferType" value="sub"> <span style="font-weight:600; color:var(--danger);"><i class="fas fa-minus-circle"></i> Quitar Bits</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cantidad de Bits *</label>
+                        <input type="number" id="transferAmount" class="form-control" placeholder="Ej: 500" min="1" step="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Motivo / Descripción (Opcional)</label>
+                        <input type="text" id="transferReason" class="form-control" placeholder="Ej: Bono o Penalización">
+                    </div>
+
+                    <div id="transferErrorMsg" style="color:var(--danger); font-size:0.85rem; margin-bottom:1rem; text-align:center;"></div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary close-modal-btn">Cancelar</button>
+                        <button type="submit" class="btn-primary" id="confirmTransferBtn" style="background:var(--success);"><i class="fas fa-paper-plane"></i> Enviar Bits</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         MODAL: EDITAR ADMINISTRADOR
+    ════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="editAdminModal">
+        <div class="modal-container" style="max-width: 480px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-edit"></i> Editar Administrador</h2>
+                <button class="close-modal" onclick="closeModal('editAdminModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="background:var(--bg-main);">
+                <form id="editAdminForm">
+                    <input type="hidden" id="editAdminUid">
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" id="editAdminName" class="form-control" placeholder="Nombre del administrador" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nivel de Acceso (Rol)</label>
+                        <select id="editAdminRole" class="form-control">
+                            <option value="superadmin">🛡️ Admin Completo (Acceso Total)</option>
+                            <option value="admin">🔒 Admin Básico (Acceso Limitado)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado</label>
+                        <select id="editAdminEstado" class="form-control">
+                            <option value="activo">✅ Activo</option>
+                            <option value="inactivo">⛔ Inactivo</option>
+                        </select>
+                    </div>
+                    <div id="editAdminError" style="color:var(--danger); font-size:0.85rem; margin-bottom:1rem; text-align:center;"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="closeModal('editAdminModal')">Cancelar</button>
+                        <button type="submit" class="btn-primary" id="saveEditAdminBtn"><i class="fas fa-save"></i> Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         MODAL: CONFIRMAR ELIMINACIÓN TELEGRAM
+    ════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="tgDeleteModal">
+        <div class="modal-container" style="max-width: 420px; text-align: center;">
+            <div class="modal-header" style="justify-content: center; border-bottom: 1px solid var(--border);">
+                <h2 style="color: var(--danger);"><i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación</h2>
+            </div>
+            <div class="modal-body" style="background: var(--bg-main); padding: 2rem;">
+                <p style="color: var(--text-muted); margin-bottom: 0.5rem;">¿Estás seguro de que deseas eliminar a:</p>
+                <p style="font-weight: 700; font-size: 1.1rem; color: var(--text-main); margin-bottom: 1.5rem;" id="tgDeleteClientName">—</p>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Esta acción ocultará al cliente de la lista de forma permanente.</p>
+            </div>
+            <div class="modal-footer" style="justify-content: center; gap: 1rem;">
+                <button id="tgConfirmDeleteNo" class="btn-secondary" style="min-width: 120px;">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button id="tgConfirmDeleteYes" class="btn-danger" style="min-width: 120px;">
+                    <i class="fas fa-trash-alt"></i> Sí, Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE COMPAT SDKs -->
+
     <script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-database-compat.js"></script>
 
-    <!-- SCRIPTS CREADOS -->
     <script src="../Assets/js/firebase.js"></script>
     <script src="../Assets/js/admin.js"></script>
+    <script src="../Assets/js/telegram.js"></script>
+    <script src="../Assets/js/theme.js"></script>
 </body>
 </html>

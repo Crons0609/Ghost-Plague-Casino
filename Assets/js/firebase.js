@@ -24,7 +24,7 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
-const Database = firebase.database();
+var Database = firebase.database();
 
 /* ──────────────────────────────────────────────────────────
    CRUD — CLIENTES (Auto-Incremental ID)

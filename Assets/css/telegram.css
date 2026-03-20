@@ -1,0 +1,291 @@
+/* ═══════════════════════════════════════════
+   TELEGRAM CRM MODULE CSS
+════════════════════════════════════════════ */
+
+/* Grid Layout */
+.tg-crm-grid {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 1.5rem;
+    align-items: stretch;
+    min-height: 600px;
+}
+
+.tg-column-left, .tg-column-right {
+    display: flex;
+    flex-direction: column;
+}
+
+/* User Card (Contact List Item) */
+.tg-client-card {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border: 1px solid transparent;
+    border-bottom: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: var(--transition);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.5rem;
+    background: transparent;
+}
+
+.tg-client-card:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-sm);
+    transform: translateX(4px);
+}
+
+.tg-client-card.selected {
+    background: rgba(44, 165, 224, 0.08);
+    border: 1px solid rgba(44, 165, 224, 0.2);
+    border-left: 4px solid #2CA5E0;
+    box-shadow: 0 4px 12px rgba(44, 165, 224, 0.1);
+}
+
+/* User Card Elements */
+.tg-client-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    background: rgba(44, 165, 224, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    color: #2CA5E0;
+    margin-right: 1.25rem;
+    flex-shrink: 0;
+    border: 1px solid rgba(44, 165, 224, 0.2);
+    transition: var(--transition);
+}
+
+.tg-client-card:hover .tg-client-avatar {
+    background: #2CA5E0;
+    color: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(44, 165, 224, 0.3);
+}
+
+.tg-client-info {
+    flex: 1;
+    overflow: hidden;
+}
+
+.tg-client-name {
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.01em;
+}
+
+.tg-client-id {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.tg-client-date {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+/* Delete Button */
+.tg-client-actions {
+    margin-left: 0.75rem;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: var(--transition);
+}
+
+.tg-client-card:hover .tg-client-actions {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.btn-delete-icon {
+    background: none;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 1.15rem;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.btn-delete-icon:hover {
+    background: rgba(239, 68, 68, 0.15);
+    transform: scale(1.1);
+}
+
+/* Status Badges */
+.tg-status-badge {
+    padding: 0.4rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    letter-spacing: 0.03em;
+}
+
+.tg-status-on {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+}
+.tg-status-on::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--success);
+    border-radius: 50%;
+}
+
+.tg-status-off {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger);
+}
+.tg-status-off::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--danger);
+    border-radius: 50%;
+}
+
+/* Empty State */
+.tg-empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-muted);
+}
+.tg-empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Scrollbar styling for the clients wrapper */
+#tgClientsWrapper::-webkit-scrollbar {
+    width: 6px;
+}
+#tgClientsWrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+#tgClientsWrapper::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+#tgClientsWrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .tg-crm-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    
+    .tg-column-left {
+        height: 400px; /* Fixed height on mobile so it scrolls */
+    }
+}
+
+/* ─── Search box ─────────────────────────── */
+.tg-search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.7rem 1rem;
+    width: 100%;
+    transition: var(--transition);
+}
+
+.tg-search-box:focus-within {
+    border-color: var(--primary);
+    background: rgba(15, 23, 42, 0.8);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.tg-search-box i {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.tg-search-box:focus-within i {
+    color: var(--primary);
+}
+
+.tg-search-box input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    width: 100%;
+}
+
+.tg-search-box input::placeholder {
+    color: var(--text-muted);
+}
+
+/* ─── Client count badge ─────────────────── */
+.tg-count-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: rgba(44,165,224,0.12);
+    color: #2CA5E0;
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+}
+
+/* ─── Per-card select (send) button ──────── */
+.tg-client-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 0.75rem;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: var(--transition);
+}
+
+.tg-client-card:hover .tg-client-actions {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.btn-tg-select {
+    background: transparent;
+    border: 1px solid rgba(44,165,224,0.3);
+    color: #2CA5E0;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.btn-tg-select:hover {
+    background: #2CA5E0;
+    color: #fff;
+    border-color: #2CA5E0;
+    box-shadow: 0 4px 12px rgba(44, 165, 224, 0.25);
+    transform: translateY(-2px);
+}

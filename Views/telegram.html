@@ -1,0 +1,68 @@
+                    <!-- ───────────────────────────────────────
+                         MODULE: TELEGRAM CRM
+                    ─────────────────────────────────────── -->
+                    <div class="content-card" style="margin-bottom:1.5rem;">
+                        <div class="card-header">
+                            <div class="flex-header">
+                                <h2><i class="fab fa-telegram-plane" style="color:#2CA5E0;"></i> CRM Integrado: Telegram Bot</h2>
+                                <div id="tgBotStatus" class="tg-status-badge tg-status-off" style="display:none;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tg-crm-grid">
+                        <!-- Left Column: Client List -->
+                        <div class="tg-column-left">
+                            <div class="content-card" style="height: 100%; display: flex; flex-direction: column;">
+                                <div class="card-header" style="flex-shrink: 0;">
+                                    <h3 style="margin: 0; font-size: 1.1rem;"><i class="fas fa-users"></i> Clientes Suscritos</h3>
+                                </div>
+                                <div class="card-body" style="flex: 1; overflow-y: auto; padding: 0.5rem;" id="tgClientsWrapper">
+                                    <div style="text-align:center; padding: 2rem; color:var(--text-muted); width: 100%;">
+                                        <i class="fas fa-spinner fa-spin fa-2x"></i>
+                                        <p style="margin-top:1rem;">Cargando base de datos...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Message Form -->
+                        <div class="tg-column-right">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <h3 style="margin: 0; font-size: 1.1rem;"><i class="fas fa-paper-plane"></i> Enviar Alerta Directa</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form id="tgMessageForm">
+                                        <!-- Token Configuration -->
+                                        <div class="form-group">
+                                            <label>Bot Token API</label>
+                                            <div class="input-container">
+                                                <i class="fas fa-key"></i>
+                                                <input type="text" id="tgTokenInput" class="form-control" placeholder="123456789:ABCdef..." autocomplete="off">
+                                            </div>
+                                            <small style="color:var(--text-muted); display:flex; justify-content:flex-end; margin-top:5px;"><a href="#" id="tgSaveTokenLayoutBtn" style="color:var(--primary);text-decoration:none;"><i class="fas fa-save"></i> Guardar Token Fijo</a></small>
+                                        </div>
+
+                                        <div class="form-group mt-3">
+                                            <label>Destinatario</label>
+                                            <select id="tgMsgTarget" class="form-control">
+                                                <option value="" disabled selected>-- Elija un usuario o broadcast --</option>
+                                                <option value="all">📢 Broadcast (Todos los clientes)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Mensaje Registrado</label>
+                                            <textarea id="tgMsgText" class="form-control" rows="8" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                                        </div>
+                                        
+                                        <div id="tgSendResult" style="margin-bottom: 1rem; text-align: center; font-size:0.9rem;"></div>
+                                        
+                                        <button type="submit" class="btn-primary w-100" id="tgSendBtn" style="padding: 12px; font-size: 1rem;">
+                                            <i class="fas fa-paper-plane"></i> Despachar Mensaje
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
