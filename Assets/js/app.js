@@ -458,8 +458,10 @@ function renderGames(games) {
     Object.entries(games).forEach(([gameId, game]) => {
         // Build card HTML
         const badgeHtml = game.badge ? `<span class="game-card__badge">${_esc(game.badge)}</span>` : '';
-        const playStr = `_toast('Entrando a ${_esc(game.name || 'Juego')}... 🎲');`;
-
+        let playStr = `_toast('Entrando a ${_esc(game.name || 'Juego')}... 🎲');`;
+        if (gameId === 'blackjack') {
+             playStr = `window.location.href = 'Views/blackjack.html';`;
+        }
         const html = `
             <div class="game-card">
               ${badgeHtml}
